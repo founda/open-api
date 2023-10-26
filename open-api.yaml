@@ -1,0 +1,237 @@
+openapi: 3.0.0
+info:
+  title: Founda platform API
+  version: 1.0.0
+servers:
+  - url: https://identity-oauth.eu.founda.com
+  - url: https://api.eu.founda.com/1/health
+paths:
+  /oauth2/token:
+    servers:
+      - url: https://identity-oauth.eu.founda.com
+    post:
+      summary: Get an access token
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - client_id
+                - client_secret
+                - grant_type
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                grant_type:
+                  type: string
+                  default: client_credentials
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+                  expires_in:
+                    type: integer
+                  scope:
+                    type: string
+  /organizations/:organizationId/fhir/4/Patient:
+    servers:
+      - url: https://api.eu.founda.com/1/health
+    get:
+      summary: Search patient by demographics
+      parameters: 
+      - schema:
+        $ref: "#/components/parameters/authorization"
+      - schema:
+        $ref: "#/components/parameters/organizationId"
+      - schema:
+        $ref: "#/components/parameters/_id"
+      - schema:
+        $ref: "#/components/parameters/active"
+      - schema:
+        $ref: "#/components/parameters/family"
+      - schema:
+        $ref: "#/components/parameters/given"
+      - schema:
+        $ref: "#/components/parameters/identifier"
+      - schema:
+        $ref: "#/components/parameters/telecom"
+      - schema:
+        $ref: "#/components/parameters/birthdate"
+      - schema:
+        $ref: "#/components/parameters/address"
+      - schema:
+        $ref: "#/components/parameters/address-city"
+      - schema:
+        $ref: "#/components/parameters/address-country"
+      - schema:
+        $ref: "#/components/parameters/address-postalcode"
+      - schema:
+        $ref: "#/components/parameters/address-state"
+      responses:
+        '200':
+          description: 'ok'
+  /organizations/:organizationId/fhir/4/Patient/:patientId:
+    get:
+      summary: Get a patient by ID
+      parameters:
+      - schema:
+        $ref: "#/components/parameters/authorization"
+      - schema:
+        $ref: "#/components/parameters/organizationId"
+      - schema:
+        $ref: "#/components/parameters/patientId"
+      - schema:
+        $ref: "#/components/parameters/_profile"
+      responses:
+        '200':
+          description: 'ok'
+
+
+components:
+  parameters:
+    authorization:
+      name: Authorization
+      in: header
+      required: true
+      description: The authorization header
+      schema:
+        type: string
+    content-Type:
+      name: content-type
+      in: header
+      required: true
+      description: The content-type header
+      schema:
+        type: string
+    organizationId:
+      name: organizationId
+      in: path
+      required: true
+      description: The organization ID
+      schema:
+        type: string
+    patientId:
+      name: patientId
+      in: path
+      required: true
+      description: The patient ID
+      schema:
+        type: string
+    _id:
+      name: _id
+      in: query
+      required: false
+      description: Resource (logical) identifier for the patient
+      schema: 
+        type: string
+    active:
+      name: active
+      in: query
+      required: false
+      description: Search for active (true) or inactive (false) patients
+      schema: 
+        type: boolean
+    family:
+      name: family
+      in: query
+      required: false
+      description: Family name or last name of the patient
+      schema: 
+        type: string
+    given:
+      name: given
+      in: query
+      required: false
+      description: Given name of the patient
+      schema: 
+        type: string
+    identifier:
+      name: identifier
+      in: query
+      required: false
+      description: A patient identifier, formatted as system|value. Multiple identifiers can be added.
+      schema: 
+        type: string
+    telecom:
+      name: telecom
+      in: query
+      required: false
+      description: Telecommunication details
+      schema: 
+        type: string
+    birthdate:
+      name: birthdate
+      in: query
+      required: false
+      description: Patient's birthday, e.g. "2000-10-01"
+      schema: 
+        type: string
+    address:
+      name: address
+      in: query
+      required: false
+      description: A known address for the patient
+      schema: 
+        type: string
+    address-city:
+      name: address-city
+      in: query
+      required: false
+      description: The city the patient lives in
+      schema: 
+        type: string
+    address-country:
+      name: address-country
+      in: query
+      required: false
+      description: The country the patient lives in
+      schema: 
+        type: string
+    address-postalcode:
+      name: address-postalcode
+      in: query
+      required: false
+      description: The postal code of the patient's address
+      schema: 
+        type: string
+    address-state:
+      name: address-state
+      in: query
+      required: false
+      description: The state the patient lives in
+      schema: 
+        type: string
+    gender:
+      name: gender
+      in: query
+      required: false
+      description: The patient's gender
+      schema: 
+        type: string
+    mothersMaidenName:
+      name: mothersMaidenName
+      in: query
+      required: false
+      description: The patient's mother's maiden name
+      schema: 
+        type: string
+    _profile:
+      name: _profile
+      in: query
+      required: true
+      description: The profile transaction URL that the request is for
+      schema: 
+        type: string
+        default: https://profiles.ihe.net/ITI/PDQm
+    
