@@ -1,0 +1,50 @@
+openapi: 3.0.0
+info:
+  title: Founda platform API
+  version: 1.0.0"
+servers:
+  - url: https://identity-oauth.eu.founda.com/oauth2/token
+  - url: https://api.eu.founda.com/1/health
+paths:
+  /oauth2/token:
+    post:
+      summary: Get an access token
+      operationId: POSTOauth2Token
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - client_id
+                - client_secret
+                - grant_type
+              properties:
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                grant_type:
+                  type: string
+                  default: client_credentials
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                access_token: ory_at_V6G-ECLU6klFXBsfZhCc02wsdYqi2pSYUww65FS_sIY.XBVEe_1bJ10_3c26seZKtWNWU5FFMGeVErX58QY7wGM
+                expires_in: 3599
+                scope: ''
+                token_type: bearer
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+                  expires_in:
+                    type: integer
+                  scope:
+                    type: string
