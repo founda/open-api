@@ -4,7 +4,6 @@ info:
   version: 1.0.0"
 servers:
   - url: https://identity-oauth.eu.founda.com/oauth2/token
-  - url: https://api.eu.founda.com/1/health
 paths:
   /oauth2/token:
     post:
